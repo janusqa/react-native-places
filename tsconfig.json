@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "strict": true
+    },
+    "exclude": ["node_modules"],
+    "include": [
+        ".eslintrc.cjs",
+        "babel.config.cjs",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.cjs",
+        "**/*.mjs"
+    ],
+    "extends": "expo/tsconfig.base"
+}
