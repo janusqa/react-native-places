@@ -85,7 +85,7 @@ const LocationPicker = ({ onPickLocation }: Props) => {
                     error instanceof Error
                         ? error.message
                         : 'Something went wrong';
-                Alert.alert('Camera Error', message);
+                Alert.alert('Location Error', message);
             }
         }
     };
@@ -93,14 +93,7 @@ const LocationPicker = ({ onPickLocation }: Props) => {
     const pickOnMapHandler = async () => {
         const hasPermission = await verifyPermission();
         if (hasPermission) {
-            if (location) {
-                navigation.navigate('Map', {
-                    location: {
-                        lat: location?.lat,
-                        lng: location?.lng,
-                    },
-                });
-            }
+            navigation.navigate('Map');
         }
     };
 

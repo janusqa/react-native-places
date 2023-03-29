@@ -3,25 +3,31 @@ import { useIsFocused } from '@react-navigation/native';
 import produce from 'immer';
 
 import PlacesList from '../components/places/PlacesList';
-import { type PlaceNativeStackScreenProps } from '../types/navigation';
 import type Place from '../models/place';
+import { getPlaces } from '../helper/database';
 
-const AllPlaces = ({ route }: PlaceNativeStackScreenProps<'AllPlaces'>) => {
+const AllPlaces = () => {
     const isFocused = useIsFocused();
     const [places, setPlaces] = useState<Place[]>([]);
 
     useEffect(
         function () {
-            if (isFocused && route.params?.place) {
+            const fetchPlaces = async () => {
+                const places = await getPlaces();
                 setPlaces((prevState) => {
                     const nextState = produce(prevState, (draft) => {
-                        draft.push(route.params.place);
+                        draft = places;
+                        return draft;
                     });
                     return nextState;
                 });
+            };
+
+            if (isFocused) {
+                void fetchPlaces();
             }
         },
-        [isFocused, route.params?.place]
+        [isFocused]
     );
     return <PlacesList places={places} />;
 };

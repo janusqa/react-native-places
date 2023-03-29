@@ -14,6 +14,7 @@ import Map from './screens/Map';
 import IconButton from './components/ui/IconButton';
 import { Colors } from './constants/colors';
 import { init } from './helper/database';
+import PlaceDetails from './screens/PlaceDetails';
 
 void preventAutoHideAsync()
     .then((result) =>
@@ -92,6 +93,11 @@ const App = () => {
                         name="Map"
                         component={Map}
                         options={{ title: 'Display Map' }}
+                    />
+                    <Stack.Screen
+                        name="PlaceDetails"
+                        component={PlaceDetails}
+                        options={{ title: 'Loading place...' }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>

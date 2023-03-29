@@ -4,7 +4,7 @@ import { Colors } from '../../constants/colors';
 
 type Props = {
     place: Place;
-    onSelect: () => void;
+    onSelect: (placeId: number) => void;
 };
 
 const PlaceItem = ({ place, onSelect }: Props) => {
@@ -14,7 +14,7 @@ const PlaceItem = ({ place, onSelect }: Props) => {
                 styles.item,
                 pressed ? styles.pressed : null,
             ]}
-            onPress={onSelect}
+            onPress={() => onSelect(place.id as number)}
         >
             <Image style={styles.image} source={{ uri: place.imageUri }} />
             <View style={styles.info}>

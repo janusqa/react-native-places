@@ -1,20 +1,18 @@
-import 'react-native-get-random-values';
-import { nanoid } from 'nanoid/non-secure';
-
 class Place {
-    #id: string;
+    #id: string | number | null;
     #title: string;
     #imageUri: string;
     #address: string;
     #location: { lat: number; lng: number };
 
     constructor(
+        id: string | number | null,
         title: string,
         imageUri: string,
         address: string,
         location: { lat: number; lng: number }
     ) {
-        this.#id = nanoid();
+        this.#id = id;
         this.#title = title;
         this.#imageUri = imageUri;
         this.#address = address;

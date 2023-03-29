@@ -34,6 +34,7 @@ const PlaceForm = ({ onCreatePlace }: Props) => {
     const savePlaceHandler = () => {
         if (pickedLocation) {
             const place = new Place(
+                null,
                 title,
                 selectedImage,
                 pickedLocation.address,

@@ -7,33 +7,40 @@ import { type PlaceNativeStackScreenProps } from '../types/navigation';
 import IconButton from '../components/ui/IconButton';
 
 const Map = ({ route, navigation }: PlaceNativeStackScreenProps<'Map'>) => {
-    const [pinnedLocation, setPinnedLocation] = useState<{
-        lat: number;
-        lng: number;
-    }>();
+    const initialLocation = route.params?.location;
 
-    const region = {
-        latitude: route.params.location.lat,
-        longitude: route.params.location.lng,
+    const [pinnedLocation, setPinnedLocation] = useState<
+        | {
+              lat: number;
+              lng: number;
+          }
+        | undefined
+    >(initialLocation);
+
+    const region = pinnedLocation && {
+        latitude: pinnedLocation.lat,
+        longitude: pinnedLocation.lng,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     };
 
     const selectLocationHandler = (event: MapPressEvent) => {
-        const lat = event.nativeEvent.coordinate.latitude;
-        const lng = event.nativeEvent.coordinate.longitude;
+        if (!initialLocation) {
+            const lat = event.nativeEvent.coordinate.latitude;
+            const lng = event.nativeEvent.coordinate.longitude;
 
-        setPinnedLocation((prevState) => {
-            const nextState = produce(prevState, (draft) => {
-                if (!draft) {
-                    draft = { lat, lng };
-                    return draft;
-                }
-                draft.lat = lat;
-                draft.lng = lng;
+            setPinnedLocation((prevState) => {
+                const nextState = produce(prevState, (draft) => {
+                    if (!draft) {
+                        draft = { lat, lng };
+                        return draft;
+                    }
+                    draft.lat = lat;
+                    draft.lng = lng;
+                });
+                return nextState;
             });
-            return nextState;
-        });
+        }
     };
 
     const savePinnedLocation = useCallback(() => {
@@ -51,18 +58,25 @@ const Map = ({ route, navigation }: PlaceNativeStackScreenProps<'Map'>) => {
 
     useLayoutEffect(
         function () {
-            navigation.setOptions({
-                headerRight: ({ tintColor }) => (
-                    <IconButton
-                        icon="save"
-                        size={24}
-                        color={tintColor}
-                        onPress={savePinnedLocation}
-                    />
-                ),
-            });
+            if (!(initialLocation?.lat && initialLocation.lng)) {
+                navigation.setOptions({
+                    headerRight: ({ tintColor }) => (
+                        <IconButton
+                            icon="save"
+                            size={24}
+                            color={tintColor}
+                            onPress={savePinnedLocation}
+                        />
+                    ),
+                });
+            }
         },
-        [navigation, savePinnedLocation]
+        [
+            navigation,
+            savePinnedLocation,
+            initialLocation?.lat,
+            initialLocation?.lng,
+        ]
     );
 
     return (
